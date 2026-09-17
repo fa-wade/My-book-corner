@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Book Corner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div>Dream ✦ Write ✦ Become</div>
+  <div class="right">
+    <span>Big dreams. Good stories. ✦</span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ============ BARRE LATERALE ============ -->
+  <aside class="sidebar">
+    <div class="brand">My Book <span>♥</span><br><em style="font-size:0.9rem;">corner</em></div>
+
+    <nav class="main-nav" id="mainNav">
+      <button data-view="accueil" class="active">🏠 Accueil</button>
+      <button data-view="idees">💡 Mes idées</button>
+      <button data-view="chapitres">📖 Mes chapitres</button>
+      <button data-view="personnages">🧑‍🤝‍🧑 Personnages</button>
+      <button data-view="univers">⭐ Mon univers</button>
+      <button data-view="notes">📝 Notes &amp; inspirations</button>
+      <button data-view="objectifs">🎯 Objectifs</button>
+      <button data-view="journal">💗 Journal de bord</button>
+    </nav>
+
+    <p class="sidebar-quote">Une grande histoire<br>commence toujours<br>par une idée...</p>
+  </aside>
+
+  <!-- ============ CONTENU PRINCIPAL ============ -->
+  <main>
+
+    <!-- ---------- VUE ACCUEIL ---------- -->
+    <section class="view active" id="view-accueil">
+      <div class="hero">
+        <div class="hero-content">
+          <h1>Bienvenue dans mon petit monde ♥</h1>
+          <p>Ici, je note mes idées, j'écris mes chapitres, je fais vivre mes personnages et je construis l'histoire qui me fait rêver.</p>
+          <button class="btn-primary" onclick="goTo('idees')">✎ Écrire un nouveau chapitre</button>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="cards">
+          <div class="card">
+            <img src="images/alba levine.jfif" alt="">
+            <div class="body"> 
+            <div class="body">
+              <h3>💡 Mes idées</h3>
+              <p>Notes, concepts, scènes, dialogues... Tout ce qui inspire mon histoire.</p>
+              <button class="go" onclick="goTo('idees')">Voir mes idées</button>
+            </div>
+          </div>
+          <div class="card">
+            <img src="images/téléchargement (30).jfif" alt="">
+            <div class="body">
+              <h3>📖 Mes chapitres</h3>
+              <p>Écris, modifie, fais évoluer ton histoire au fil des chapitres.</p>
+              <button class="go" onclick="goTo('chapitres')">Accéder à mes chapitres</button>
+            </div>
+          </div>
+          <div class="card">
+            <img src="images/téléchargement (32).jfif" alt="">
+            <div class="body">
+              <h3>🧑‍🤝‍🧑 Mes personnages</h3>
+              <p>Leurs histoires, leurs secrets, leurs évolutions.</p>
+              <button class="go" onclick="goTo('personnages')">Voir mes personnages</button>
+            </div>
+          </div>
+          <div class="card">
+            <img src="images/téléchargement (33).jfif" alt="">
+            <div class="body">
+              <h3>⭐ Mon univers</h3>
+              <p>Lieux, ambiance, époque, détails du quotidien...</p>
+              <button class="go" onclick="goTo('univers')">Explorer mon univers</button>
+            </div>
+          </div>
+          <div class="card">
+            <img src="images/téléchargement (34).jfif" alt="">
+            <div class="body">
+              <h3>📝 Notes &amp; inspirations</h3>
+              <p>Des citations, des musiques, des films, des images... tout ce qui nourrit mon histoire.</p>
+              <button class="go" onclick="goTo('notes')">Voir mes inspirations</button>
+            </div>
+          </div>
+          <div class="card">
+            <img src="images/𑣲.jfif" alt="">
+            <div class="body">
+              <h3>💗 Journal de bord</h3>
+              <p>Mes réflexions, mes avancées, mes doutes, mes petites victoires.</p>
+              <button class="go" onclick="goTo('journal')">Lire mon journal</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-col">
+          <div class="widget quote-card">
+            « Écrire, c'est un peu comme tomber amoureuse : on s'attache à des personnages, à des mondes, à des émotions qui n'existent que dans notre esprit. »
+          </div>
+          <div class="widget">
+            <h4>Mes objectifs</h4>
+            <ul class="goal-list" id="goalList"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- VUE MES IDEES (fonctionnelle) ---------- -->
+    <section class="view" id="view-idees">
+      <h2 class="page-title">💡 Mes idées</h2>
+      <p class="page-sub">Note tout ce qui te passe par la tête : une scène, une réplique, un concept.</p>
+
+      <form class="idea-form" id="ideaForm">
+        <input type="text" id="ideaTitre" placeholder="Titre de l'idée (ex: La rencontre au café)" required>
+        <div class="row">
+          <select id="ideaTag">
+            <option value="Scène">Scène</option>
+            <option value="Dialogue">Dialogue</option>
+            <option value="Concept">Concept</option>
+            <option value="Personnage">Personnage</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <textarea id="ideaContenu" placeholder="Décris ton idée en quelques phrases..." required></textarea>
+        <button type="submit">+ Ajouter l'idée</button>
+      </form>
+
+      <div class="idea-list" id="ideaList">
+        <p class="empty">Chargement de tes idées...</p>
+      </div>
+    </section>
+
+    <!-- ---------- VUES A VENIR (placeholders) ---------- -->
+    <section class="view" id="view-chapitres">
+      <div class="placeholder"><h2>📖 Mes chapitres</h2><p>On construira cette page ensemble à la prochaine étape !</p></div>
+    </section>
+    <section class="view" id="view-personnages">
+      <div class="placeholder"><h2>🧑‍🤝‍🧑 Personnages</h2><p>On construira cette page ensemble à la prochaine étape !</p></div>
+    </section>
+    <section class="view" id="view-univers">
+      <div class="placeholder"><h2>⭐ Mon univers</h2><p>On construira cette page ensemble à la prochaine étape !</p></div>
+    </section>
+    <section class="view" id="view-notes">
+      <div class="placeholder"><h2>📝 Notes &amp; inspirations</h2><p>On construira cette page ensemble à la prochaine étape !</p></div>
+    </section>
+    <section class="view" id="view-objectifs">
+      <div class="placeholder"><h2>🎯 Objectifs</h2><p>On construira cette page ensemble à la prochaine étape !</p></div>
+    </section>
+    <section class="view" id="view-journal">
+      <div class="placeholder"><h2>💗 Journal de bord</h2><p>On construira cette page ensemble à la prochaine étape !</p></div>
+    </section>
+
+  </main>
+</div>
+
+<footer>♥ My Book corner &nbsp;—&nbsp; Écrire aujourd'hui, la vie de demain</footer>
+
+<script src="script.js"></script>
+</html>

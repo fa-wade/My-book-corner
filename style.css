@@ -1,0 +1,304 @@
+  /* ============================================
+     1) VARIABLES DE COULEURS — on change tout ici
+     ============================================ */
+  :root{
+    --bg: #fbeef2;
+    --bg-soft: #fdf5f2;
+    --header: #241318;
+    --ink: #3a1f2b;
+    --ink-soft: #7a5866;
+    --card: #ffffff;
+    --accent: #c9668a;
+    --accent-dark: #a94d70;
+    --border: #f2dde3;
+    --shadow: 0 10px 25px rgba(58, 31, 43, 0.08);
+    --radius: 14px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Poppins', sans-serif;
+    font-weight:400;
+  }
+
+  h1,h2,h3, .brand, .quote{
+    font-family:'Playfair Display', serif;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; }
+
+  /* ============================================
+     2) BARRE DU HAUT
+     ============================================ */
+  .topbar{
+    background:var(--header);
+    color:#f4d9e2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 24px;
+    font-size:0.8rem;
+    letter-spacing:0.03em;
+  }
+  .topbar .right{ display:flex; gap:16px; align-items:center; opacity:0.85; }
+
+  /* ============================================
+     3) STRUCTURE GENERALE : sidebar + contenu
+     ============================================ */
+  .layout{
+    display:grid;
+    grid-template-columns: 240px 1fr;
+    min-height:100vh;
+  }
+
+  .sidebar{
+    background:var(--bg-soft);
+    border-right:1px solid var(--border);
+    padding:28px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+  }
+
+  .brand{
+    font-size:1.4rem;
+    font-weight:600;
+    line-height:1.1;
+  }
+  .brand span{ color:var(--accent); }
+
+  nav.main-nav{ display:flex; flex-direction:column; gap:4px; }
+  nav.main-nav button{
+    background:none;
+    text-align:left;
+    padding:10px 12px;
+    border-radius:10px;
+    color:var(--ink);
+    font-size:0.92rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  nav.main-nav button:hover{ background:#f6e2e8; }
+  nav.main-nav button.active{ background:var(--accent); color:#fff; }
+
+  .sidebar-quote{
+    margin-top:auto;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:0.9rem;
+    line-height:1.5;
+  }
+
+  main{ padding:32px 32px 60px; }
+
+  /* ============================================
+     4) HERO (bannière d'accueil)
+     ============================================ */
+  .hero{
+    position:relative;
+    border-radius:20px;
+    overflow:hidden;
+    min-height:280px;
+    display:flex;
+    align-items:center;
+    padding:40px;
+    color:#fff;
+    background:
+      linear-gradient(100deg, rgba(36,19,24,0.72) 20%, rgba(36,19,24,0.15) 65%),
+      url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1400&auto=format&fit=crop') center/cover;
+  }
+  .hero-content{ max-width:480px; }
+  .hero h1{ font-size:2rem; margin:0 0 14px; line-height:1.2; }
+  .hero p{ font-size:0.95rem; line-height:1.6; opacity:0.92; margin:0 0 22px; }
+  .btn-primary{
+    background:var(--accent);
+    color:#fff;
+    padding:12px 22px;
+    border-radius:30px;
+    font-size:0.9rem;
+    font-weight:500;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:background .15s ease;
+  }
+  .btn-primary:hover{ background:var(--accent-dark); }
+
+  /* ============================================
+     5) GRILLE DE CARTES (Mes idées, Mes chapitres...)
+     ============================================ */
+  .content-grid{
+    display:grid;
+    grid-template-columns: 2fr 1fr;
+    gap:24px;
+    margin-top:28px;
+    align-items:start;
+  }
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+  }
+  .card img{ width:100%; height:120px; object-fit:cover; display:block; }
+  .card .body{ padding:16px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card h3{ font-size:1rem; margin:0; display:flex; align-items:center; gap:8px; }
+  .card p{ font-size:0.82rem; color:var(--ink-soft); line-height:1.5; margin:0; flex:1; }
+  .card .go{
+    align-self:flex-start;
+    background:var(--accent);
+    color:#fff;
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:0.78rem;
+  }
+  .card .go:hover{ background:var(--accent-dark); }
+
+  /* ============================================
+     6) COLONNE DE DROITE (widgets)
+     ============================================ */
+  .side-col{ display:flex; flex-direction:column; gap:20px; }
+  .widget{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px;
+  }
+  .widget.quote-card{
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    box-shadow:none;
+    font-style:italic;
+    color:var(--ink-soft);
+    line-height:1.6;
+    font-size:0.92rem;
+    text-align:center;
+  }
+  .widget h4{ margin:0 0 12px; font-size:0.95rem; }
+  .goal-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+  .goal-list li{ display:flex; align-items:center; gap:10px; font-size:0.85rem; color:var(--ink-soft); }
+  .goal-list input{ accent-color:var(--accent); width:15px; height:15px; }
+  .goal-list li.done{ color:var(--ink); }
+
+  footer{
+    text-align:center;
+    padding:22px;
+    background:var(--header);
+    color:#f4d9e2;
+    font-size:0.85rem;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+  }
+
+  /* ============================================
+     7) VUE "MES IDÉES"
+     ============================================ */
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  .page-title{ margin:0 0 6px; font-size:1.6rem; }
+  .page-sub{ color:var(--ink-soft); margin:0 0 26px; font-size:0.92rem; }
+
+  .idea-form{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px;
+    display:grid;
+    gap:12px;
+    margin-bottom:28px;
+  }
+  .idea-form input, .idea-form textarea{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+    font-family:inherit;
+    font-size:0.9rem;
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+  .idea-form textarea{ min-height:90px; resize:vertical; }
+  .idea-form .row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .idea-form .row > *{ flex:1; min-width:160px; }
+  .idea-form button{
+    justify-self:start;
+    background:var(--accent);
+    color:#fff;
+    padding:10px 22px;
+    border-radius:24px;
+    font-size:0.88rem;
+  }
+  .idea-form button:hover{ background:var(--accent-dark); }
+
+  .idea-list{ display:grid; gap:14px; }
+  .idea{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .idea .txt h3{ margin:0 0 6px; font-size:1rem; }
+  .idea .txt p{ margin:0 0 8px; font-size:0.85rem; color:var(--ink-soft); line-height:1.5; white-space:pre-wrap; }
+  .idea .tag{
+    display:inline-block;
+    background:#f6e2e8;
+    color:var(--accent-dark);
+    font-size:0.72rem;
+    padding:3px 10px;
+    border-radius:12px;
+  }
+  .idea .date{ font-size:0.72rem; color:#b799a3; margin-top:6px; }
+  .idea .del{
+    background:none;
+    color:#c98;
+    font-size:1.2rem;
+    align-self:flex-start;
+    opacity:0.5;
+  }
+  .idea .del:hover{ opacity:1; color:var(--accent-dark); }
+  .empty{ color:var(--ink-soft); font-size:0.9rem; padding:20px; text-align:center; }
+
+  .placeholder{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:60px 30px;
+    text-align:center;
+    color:var(--ink-soft);
+  }
+  .placeholder h2{ color:var(--ink); margin-bottom:8px; }
+
+  /* ============================================
+     8) RESPONSIVE
+     ============================================ */
+  @media (max-width: 900px){
+    .layout{ grid-template-columns:1fr; }
+    .sidebar{ flex-direction:row; flex-wrap:wrap; padding:16px; }
+    .sidebar-quote{ display:none; }
+    nav.main-nav{ flex-direction:row; flex-wrap:wrap; }
+    .content-grid{ grid-template-columns:1fr; }
+    .cards{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .cards{ grid-template-columns:1fr; }
+    main{ padding:20px; }
+  }
