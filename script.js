@@ -1,15 +1,16 @@
 /* =========================================================
-   FIREBASE : connexion à ta base de données Firestore
+   FIREBASE : connexion à ton projet + à ta base Firestore
    ========================================================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import {
   getFirestore, collection, addDoc, deleteDoc, doc,
   onSnapshot, serverTimestamp, query, orderBy
 } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
 
 // Ta config, copiée depuis la console Firebase.
-// (Pas un secret à cacher : côté client, la vraie sécurité
-// se fait avec les "règles" Firestore, pas en cachant cette clé)
 const firebaseConfig = {
   apiKey: "AIzaSyDuC15nHzKcdIPOXiFFgaktSjyKbIRlXEI",
   authDomain: "my-book-corner.firebaseapp.com",
@@ -21,6 +22,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 /* =========================================================
    NAVIGATION : on affiche/cache les sections selon le clic
@@ -33,8 +35,7 @@ function goTo(viewName){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 navButtons.forEach(btn => btn.addEventListener('click', () => goTo(btn.dataset.view)));
-// on rend goTo disponible pour les onclick="goTo(...)" dans le HTML
-window.goTo = goTo;
+window.goTo = goTo; // pour les onclick="goTo(...)" dans le HTML
 
 /* =========================================================
    OBJECTIFS (liste statique pour l'instant, coché = terminé)
@@ -55,11 +56,47 @@ goals.forEach(g => {
 });
 
 /* =========================================================
-   MES IDEES : sauvegarde réelle avec Firestore
+   AUTHENTIFICATION : seule la personne connectée voit "Mes idées"
+   ========================================================= */
+const authGateEl = document.getElementById('authGate');
+const ideasAreaEl = document.getElementById('ideasArea');
+const authErrorEl = document.getElementById('authError');
+let unsubscribeIdeas = null; // pour arrêter d'écouter Firestore à la déconnexion
+
+document.getElementById('authLoginBtn').addEventListener('click', async () => {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  authErrorEl.textContent = '';
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+  }catch(err){
+    authErrorEl.textContent = "E-mail ou mot de passe incorrect.";
+  }
+});
+
+document.getElementById('authLogoutBtn').addEventListener('click', () => {
+  signOut(auth);
+});
+
+// onAuthStateChanged : Firebase nous prévient à chaque connexion/déconnexion
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    authGateEl.style.display = 'none';
+    ideasAreaEl.style.display = 'block';
+    startListeningIdeas();
+  }else{
+    authGateEl.style.display = 'grid';
+    ideasAreaEl.style.display = 'none';
+    if(unsubscribeIdeas){ unsubscribeIdeas(); unsubscribeIdeas = null; }
+  }
+});
+
+/* =========================================================
+   MES IDEES : sauvegarde réelle avec Firestore (protégée)
    ========================================================= */
 const ideaListEl = document.getElementById('ideaList');
 const ideaForm = document.getElementById('ideaForm');
-const ideasCollection = collection(db, 'idees'); // la "table" idees
+const ideasCollection = collection(db, 'idees');
 
 function escapeHtml(str){
   const d = document.createElement('div');
@@ -76,7 +113,6 @@ function renderIdeas(ideas){
   ideas.forEach(idea => {
     const div = document.createElement('div');
     div.className = 'idea';
-    // idea.createdAt est un Timestamp Firestore, .toDate() le convertit en date JS
     const date = idea.createdAt ? idea.createdAt.toDate().toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'}) : "à l'instant";
     div.innerHTML = `
       <div class="txt">
@@ -94,16 +130,16 @@ function renderIdeas(ideas){
   });
 }
 
-// onSnapshot = "écoute en direct" : dès qu'un document change dans
-// Firestore (ajout, suppression), cette fonction est rappelée automatiquement.
-const ideasQuery = query(ideasCollection, orderBy('createdAt', 'desc'));
-onSnapshot(ideasQuery, (snapshot) => {
-  const ideas = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
-  renderIdeas(ideas);
-}, (error) => {
-  console.error(error);
-  ideaListEl.innerHTML = '<p class="empty">Erreur de connexion à la base de données. Vérifie tes règles Firestore.</p>';
-});
+function startListeningIdeas(){
+  const ideasQuery = query(ideasCollection, orderBy('createdAt', 'desc'));
+  unsubscribeIdeas = onSnapshot(ideasQuery, (snapshot) => {
+    const ideas = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+    renderIdeas(ideas);
+  }, (error) => {
+    console.error(error);
+    ideaListEl.innerHTML = '<p class="empty">Erreur de connexion à la base de données.</p>';
+  });
+}
 
 ideaForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -113,10 +149,8 @@ ideaForm.addEventListener('submit', async (e) => {
   if(!titre || !contenu) return;
 
   await addDoc(ideasCollection, {
-    titre,
-    contenu,
-    tag,
-    createdAt: serverTimestamp() // l'heure est posée par le serveur Firebase
+    titre, contenu, tag,
+    createdAt: serverTimestamp()
   });
   ideaForm.reset();
 });

@@ -1,4 +1,4 @@
-  /* ============================================
+/* ============================================
      1) VARIABLES DE COULEURS — on change tout ici
      ============================================ */
   :root{
@@ -302,3 +302,18 @@
     .cards{ grid-template-columns:1fr; }
     main{ padding:20px; }
   }
+
+  /* ============================================
+     9) CONNEXION (protection de Mes idées)
+     ============================================ */
+  #authGate{ max-width:380px; }
+  .btn-logout{
+    background:none;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    margin-bottom:16px;
+    padding:0;
+  }
+  .btn-logout:hover{ color:var(--accent-dark); }
+  #authError{ color:#b33a5a; font-size:0.85rem; min-height:1.2em; margin:0; }
